@@ -12,6 +12,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// TEST
+
 func TestRun(t *testing.T) {
 	l, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
