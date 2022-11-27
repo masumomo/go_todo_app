@@ -6,10 +6,10 @@ on:
       - .github/workflows/golangci.yml
 jobs:
   golangci-lint:
-    name: golangci-lint:
+    name: golangci-lint
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the GO module directory
+      - name: Check out code into the Go module directory
         uses: actions/checkout@v3
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
