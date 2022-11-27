@@ -18,6 +18,7 @@ func main() {
 	}
 
 	log.Printf("port number: %s\n", os.Args[1])
+	fmt.Printf("-test fix\n%#v\n----\n", os.Args)
 	p := os.Args[1]
 	l, err := net.Listen("tcp", ":"+p)
 	if err != nil {
