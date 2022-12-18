@@ -1,10 +1,10 @@
 .PHONY: help build build-local up down logs ps test
 .DEDAULT_GOAL := help
 
-DOCKER_TAB := latest
+DOCKER_TAG := latest
 build: ## Build docker image to deploy
-	docker build -t masumomo/gotodo:${DOCKER_TAB} \
-		-- target deploy ./
+	docker build -t masumomo/gotodo:${DOCKER_TAG} \
+		--target deploy ./
 
 build-local: ## Build docker image to local development
 	docker compose build --no-cache

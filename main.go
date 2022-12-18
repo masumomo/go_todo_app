@@ -5,11 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
-	"time"
 
 	"github.com/masumomo/go_todo_app/config"
-	"golang.org/x/sync/errgroup"
 )
 
 func main() {
@@ -19,8 +16,6 @@ func main() {
 }
 
 func run(ctx context.Context) error {
-	// ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
-	// defer stop()
 	cfg, err := config.New()
 	if err != nil {
 		return err
@@ -32,31 +27,9 @@ func run(ctx context.Context) error {
 	}
 
 	url := fmt.Sprintf("http://%s", l.Addr().String())
-	fmt.Printf("Start with %v", url)
-	s := &http.Server{
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	log.Printf("start with %v", url)
+	mux := NewMux()
+	s := NewServer(l, mux)
 
-			time.Sleep(5 * time.Second)
-			fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
-		}),
-	}
-	eg, ctx := errgroup.WithContext(ctx)
-
-	eg.Go(func() error {
-		if err := s.Serve(l); err != nil {
-			if err != http.ErrServerClosed {
-				log.Printf("failed to close: %+v", err)
-				return err
-			}
-		}
-
-		return nil
-	})
-
-	<-ctx.Done()
-	if err := s.Shutdown(context.Background()); err != nil {
-		log.Printf("failed to shutdown: %+v", err)
-	}
-
-	return eg.Wait()
+	return s.Run(ctx)
 }
