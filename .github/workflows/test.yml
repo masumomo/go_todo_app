@@ -22,6 +22,12 @@ jobs:
           MYSQL_DATABASE: todo
           MYSQL_USER: todo
           MYSQL_PASSWORD: todo
+      spanner:
+        image: gcr.io/cloud-spanner-emulator/emulator
+        ports:
+          - 9010:9010
+        env:
+          SPANNER_EMULATOR_HOST: localhost
     steps:
     - uses: actions/setup-go@v3
       with:
