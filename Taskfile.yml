@@ -1,0 +1,51 @@
+version: '3'
+
+vars:
+  DOCKER_TAG: latest
+
+tasks:
+  build:
+    desc: Build docker image to deploy
+    cmds:
+      - docker push masumomo/gotodoapp:{{.DOCKER_TAG}}
+
+  build-local:
+    desc: Build docker image to local development
+    cmds:
+      - docker compose build --no-cache
+
+  up:
+    desc: Do docker compose up with hot reload
+    cmds:
+      - docker compose up -d
+
+  down:
+    desc: Do docker compose down
+    cmds:
+      - docker compose down
+
+  logs:
+    desc: Tail docker compose logs
+    cmds:
+      - docker compose logs -f
+
+  ps:
+    desc: Check container status
+    cmds:
+      - docker compose ps
+    
+  test:
+    desc: Execute tests
+    cmds:
+      - go test -race -shuffle=on ./...
+    
+  migrate:
+    desc: Migration
+    cmds:
+      - mysqldef -u todo -p todo -h 127.0.0.1 -P 33306 todo < ./_tools/mysql/schema.sql
+
+  dry-migrate:
+    desc: Dry Migration
+    cmds:
+      - mysqldef -u todo -p todo -h 127.0.0.1 -P 33306 todo --dry-run < ./_tools/mysql/schema.sql
+      
