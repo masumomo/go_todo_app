@@ -2,13 +2,13 @@ package handler
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/masumomo/go_todo_app/entity"
-	"github.com/masumomo/go_todo_app/store"
 	"github.com/masumomo/go_todo_app/testutil"
 )
 
@@ -49,12 +49,16 @@ func TestAddTask(t *testing.T) {
 			"/task",
 			bytes.NewReader(testutil.LoadFile(t, tt.reqFile)),
 		)
+
+		moq := &AddTaskServiceMock{}
+		moq.AddTaskFunc = func(ctx context.Context, title string) (*entity.Task, error) {
+			return nil, nil
+		}
 		sut := AddTask{
-			Store: &store.TasksStore{
-				Tasks: map[entity.TaskID]*entity.Task{},
-			},
+			Service:   moq,
 			Validator: validator.New(),
 		}
+
 		sut.ServeHTTP(w, r)
 
 		resp := w.Result()

@@ -1,16 +1,27 @@
 package main
 
 import (
+	"context"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/masumomo/go_todo_app/config"
 )
 
 func TestNewNum(t *testing.T) {
 	w := httptest.NewRecorder()
 	r := httptest.NewRequest(http.MethodGet, "/health", nil)
-	sut := NewMux()
+	cfg, err := config.New()
+	if err != nil {
+		t.Fatalf("failed to read body %v", err)
+	}
+	sut, clearnup, err := NewMux(context.Background(), cfg)
+	if err != nil {
+		t.Fatalf("failed to read body %v", err)
+	}
+	defer clearnup()
 	sut.ServeHTTP(w, r)
 	resp := w.Result()
 	t.Cleanup(func() { _ = resp.Body.Close() })

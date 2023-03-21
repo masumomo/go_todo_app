@@ -27,25 +27,6 @@ func NewServer(l net.Listener, mux http.Handler) *Server {
 func (s *Server) Run(ctx context.Context) error {
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	// cfg, err := config.New()
-	// if err != nil {
-	// 	return err
-	// }
-
-	// l, err := net.Listen("tcp", ":"+fmt.Sprintf("%d", cfg.Port))
-	// if err != nil {
-	// 	log.Fatalf("failed to listen port %d: %v", cfg.Port, err)
-	// }
-
-	// url := fmt.Sprintf("http://%s", l.Addr().String())
-	// fmt.Printf("Start with (Graceful mode) %v", url)
-	// // fmt.Printf("Start with (Non graceful mode) %v", url)
-	// s := &http.Server{
-	// 	Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	// 		time.Sleep(5 * time.Second)
-	// 		fmt.Fprintf(w, "Hello, %s!", r.URL.Path[1:])
-	// 	}),
-	// }
 	eg, ctx := errgroup.WithContext(ctx)
 
 	eg.Go(func() error {

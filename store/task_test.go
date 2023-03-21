@@ -2,8 +2,9 @@ package store
 
 import (
 	"context"
-	"github.com/jmoiron/sqlx"
 	"testing"
+
+	"github.com/jmoiron/sqlx"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/go-cmp/cmp"
@@ -186,6 +187,7 @@ func TestRepository_AddTask(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	t.Cleanup(func() { db.Close() })
 
 	mock.ExpectExec(
